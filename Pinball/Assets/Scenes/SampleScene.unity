@@ -4521,7 +4521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c80c106a538bd4a74a3d3638d5116f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PointsNumber: 3
+  PointsNumber: 0
   PointsText: {fileID: 1242431377}
 --- !u!4 &1446280108
 Transform:
