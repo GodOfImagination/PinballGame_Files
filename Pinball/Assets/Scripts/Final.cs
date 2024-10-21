@@ -15,7 +15,7 @@ public class Final : MonoBehaviour
 	{
 		if (other.gameObject.name == "Ball")
 		{
-			GameplayScript.LoseGame();
+			GameplayScript.EndGame();
 		}
 	}
 }

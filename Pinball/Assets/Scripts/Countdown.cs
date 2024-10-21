@@ -30,7 +30,7 @@ public class Countdown : MonoBehaviour
             {
                 RemainingTime = 0;
                 TimerIsRunning = false;
-                GameplayScript.WinGame();
+                GameplayScript.EndGame();
                 Destroy(this.gameObject);
             }
         }
@@ -50,8 +50,6 @@ public class Countdown : MonoBehaviour
 
     public void EndTime()
     {
-        RemainingTime = 0;
         TimerIsRunning = false;
-        Destroy(this.gameObject);
     }
 }

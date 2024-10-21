@@ -23,7 +23,7 @@ public class Spring : MonoBehaviour
 
     void Update()
 	{
-		if (Input.GetButton(ButtonName)) // As the button is held down, slowly move the piece.
+		if (Input.GetButton(ButtonName) && IsReady) // As the button is held down, slowly move the piece.
 		{
 			if (MoveCount < MoveDistance)
 			{
