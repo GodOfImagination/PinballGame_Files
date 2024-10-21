@@ -5,7 +5,11 @@ using UnityEngine;
 public class Bumper : MonoBehaviour
 {
 	public int PointsRewarded;
-	public float BumperForce = 0f;
+
+	public float BumperForce = 300f;
+	public float BumperFlash = 0.1f;
+
+	private Light BumperLight;
 
 	private GameObject Ball;
 	private Rigidbody BallRigidbody;
@@ -14,20 +18,33 @@ public class Bumper : MonoBehaviour
 
     void Start()
     {
+		BumperLight = GetComponent<Light>();
+
 		Ball = GameObject.Find("Ball");
 		BallRigidbody = Ball.GetComponent<Rigidbody>();
 
 		GameplayScript = GameObject.FindObjectOfType<Gameplay>();
-    }
+
+		BumperLight.intensity = 0;
+	}
 
 	void OnCollisionEnter(Collision other)
 	{
 		if (other.gameObject.name == "Ball")
 		{
-			GameplayScript.AddPoints(PointsRewarded);
+			StartCoroutine(LightFlash());
 
 			Vector3 Direction = transform.position - Ball.transform.position;
 			BallRigidbody.AddForce(-Direction * BumperForce);
+
+			GameplayScript.AddPoints(PointsRewarded);
 		}
 	}
+
+	private IEnumerator LightFlash()
+    {
+		BumperLight.intensity = 100;
+		yield return new WaitForSeconds(BumperFlash);
+		BumperLight.intensity = 0;
+	}		
 }

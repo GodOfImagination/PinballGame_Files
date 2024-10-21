@@ -7620,7 +7620,7 @@ MonoBehaviour:
   RemainingTime: 120
   TimeText: {fileID: 2063478925}
   PointsCount: 0
-  PointsNeeded: 4
+  PointsNeeded: 9
   PointsNeededText: {fileID: 171610973}
   PointsText: {fileID: 2122282060}
   ScoreTimeText: {fileID: 542597421}
@@ -8688,7 +8688,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 61d96f85a859e43769f8d71556d1e34d, type: 2}
+  - {fileID: 2100000, guid: 5b4a08e86ed964b2ca7e9e10ff1715d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9259,7 +9259,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 61d96f85a859e43769f8d71556d1e34d, type: 2}
+  - {fileID: 2100000, guid: 5b4a08e86ed964b2ca7e9e10ff1715d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

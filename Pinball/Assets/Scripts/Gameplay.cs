@@ -48,7 +48,10 @@ public class Gameplay : MonoBehaviour
 
     private AudioSource AudioSource;
 
+    private Countdown CountdownScript;
+
     private bool TimerIsRunning = false;
+    private bool CountdownStarted = false;
     private bool GameFinished = false;
 
     void Start()
@@ -67,6 +70,8 @@ public class Gameplay : MonoBehaviour
         LeftButton = GameObject.Find("LeftButton");
 
         AudioSource = GetComponent<AudioSource>();
+
+        CountdownScript = GameObject.FindObjectOfType<Countdown>();
 
         PointsNeededText.text = (PointsNeeded + 1).ToString();
 
@@ -95,6 +100,12 @@ public class Gameplay : MonoBehaviour
                 RemainingTime = 0;
                 TimerIsRunning = false;
                 EndGame();
+            }
+
+            if (RemainingTime < 6 && CountdownStarted == false)
+            {
+                CountdownScript.StartTheCountdown();
+                CountdownStarted = true;
             }
         }
 
@@ -138,6 +149,8 @@ public class Gameplay : MonoBehaviour
             Destroy(Ball);
 
             EndPanel.SetActive(true);
+
+            CountdownScript.End();
 
             TimerIsRunning = false;
             GameFinished = true;
