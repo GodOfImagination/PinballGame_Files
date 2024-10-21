@@ -10,15 +10,21 @@ public class Spring : MonoBehaviour
 	public string ButtonName = "Pull";
 
 	private float MoveCount = 0;
+
 	private bool IsReady = false;
 	private bool Launch = false;
+
 	private GameObject Ball;
 	private Rigidbody BallRigidbody;
+
+	private AudioSource AudioSource;
 
 	void Start()
     {
 		Ball = GameObject.Find("Ball");
 		BallRigidbody = Ball.GetComponent<Rigidbody>();
+
+		AudioSource = GetComponent<AudioSource>();
 	}
 
     void Update()
@@ -40,6 +46,7 @@ public class Spring : MonoBehaviour
 				BallRigidbody.AddForce(0, 0, MoveCount * LaunchPower);
 				Launch = false;
 				IsReady = false;
+				AudioSource.Play();
 			}
 			// Once we have reached the starting position fire off!
 			transform.Translate(0, 0, 20 * Time.deltaTime);

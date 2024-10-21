@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Flipper : MonoBehaviour
 {
-	public float restPosition = 0f;
-	public float pressedPosition = 45f;
-	public float flipperStrength = 10f;
-	public float flipperDamper = 1f;
+	public float RestPosition = 0f;
+	public float PressedPosition = 45f;
+	public float FlipperStrength = 10f;
+	public float FlipperDamper = 1f;
 	public string ButtonName = "Flipper";
 
 	private HingeJoint FlipperHinge;
@@ -23,17 +23,17 @@ public class Flipper : MonoBehaviour
 		JointSpring FlipperSpring = FlipperHinge.spring;
 		JointLimits FlipperLimits = FlipperHinge.limits;
 
-		FlipperSpring.spring = flipperStrength;
-		FlipperSpring.damper = flipperDamper;
+		FlipperSpring.spring = FlipperStrength;
+		FlipperSpring.damper = FlipperDamper;
 
 		if (Input.GetButton(ButtonName))
-			FlipperSpring.targetPosition = pressedPosition;
+			FlipperSpring.targetPosition = PressedPosition;
 		else
-			FlipperSpring.targetPosition = restPosition;
+			FlipperSpring.targetPosition = RestPosition;
 
 		FlipperHinge.spring = FlipperSpring;
 		FlipperHinge.useLimits = true;
-		FlipperLimits.min = restPosition;
-		FlipperLimits.max = pressedPosition;
+		FlipperLimits.min = RestPosition;
+		FlipperLimits.max = PressedPosition;
 	}
 }

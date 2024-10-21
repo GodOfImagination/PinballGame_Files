@@ -11,8 +11,9 @@ public class Gameplay : MonoBehaviour
     public TMP_Text TimeText;
 
     [Header("Points")]
-    public int PointsNumber = 0;
-    public int PointsRequired = 0;
+    public int PointsCount = 0;
+    public int PointsNeeded = 0;
+    public TMP_Text PointsNeededText;
     public TMP_Text PointsText;
 
     [Header("Score")]
@@ -35,7 +36,6 @@ public class Gameplay : MonoBehaviour
     private GameObject Ball;
 
     private GameObject StartPanel;
-    private GameObject GamePanel;
     private GameObject EndPanel;
 
     private GameObject ScoreTime;
@@ -56,7 +56,6 @@ public class Gameplay : MonoBehaviour
         Ball = GameObject.Find("Ball");
 
         StartPanel = GameObject.Find("StartPanel");
-        GamePanel = GameObject.Find("GamePanel");
         EndPanel = GameObject.Find("EndPanel");
 
         ScoreTime = GameObject.Find("Text1Right");
@@ -69,7 +68,8 @@ public class Gameplay : MonoBehaviour
 
         AudioSource = GetComponent<AudioSource>();
 
-        GamePanel.SetActive(false);
+        PointsNeededText.text = (PointsNeeded + 1).ToString();
+
         EndPanel.SetActive(false);
 
         ScoreTime.SetActive(false);
@@ -101,7 +101,6 @@ public class Gameplay : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space) && GameFinished == false)
         {
             StartPanel.SetActive(false);
-            GamePanel.SetActive(true);
 
             TimerIsRunning = true;
         }
@@ -125,8 +124,8 @@ public class Gameplay : MonoBehaviour
 
     public void AddPoints(int PointsEarned)
     {
-        PointsNumber += PointsEarned;
-        PointsText.text = PointsNumber.ToString();
+        PointsCount += PointsEarned;
+        PointsText.text = PointsCount.ToString();
 
         AudioSource.clip = PointSound;
         AudioSource.Play();
@@ -138,7 +137,6 @@ public class Gameplay : MonoBehaviour
         {
             Destroy(Ball);
 
-            GamePanel.SetActive(false);
             EndPanel.SetActive(true);
 
             TimerIsRunning = false;
@@ -164,7 +162,7 @@ public class Gameplay : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         ScorePoints.SetActive(true);
-        ScorePointsText.text = PointsNumber.ToString();
+        ScorePointsText.text = PointsCount.ToString();
 
         AudioSource.clip = ScoreSound;
         AudioSource.Play();
@@ -176,7 +174,7 @@ public class Gameplay : MonoBehaviour
 
         yield return new WaitForSeconds(1.8f);
 
-        if (PointsNumber > PointsRequired)
+        if (PointsCount > PointsNeeded)
         {
             ScoreConclusion.SetActive(true);
             ScoreConclusionText.text = "Victory";
