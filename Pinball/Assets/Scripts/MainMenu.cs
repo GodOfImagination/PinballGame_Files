@@ -10,15 +10,20 @@ public class MainMenu : MonoBehaviour
     public AudioClip CurrentClip;
 
     private GameObject TitlePanel;
+    private GameObject ControlsPanel;
     private GameObject LevelPanel;
+
     private AudioSource AudioSource;
 
     void Start()
     {
         TitlePanel = GameObject.Find("TitlePanel");
+        ControlsPanel = GameObject.Find("ControlsPanel");
         LevelPanel = GameObject.Find("LevelPanel");
+
         AudioSource = GetComponent<AudioSource>();
 
+        ControlsPanel.SetActive(false);
         LevelPanel.SetActive(false);
     }
 
@@ -38,5 +43,17 @@ public class MainMenu : MonoBehaviour
     {
         TitlePanel.SetActive(false);
         LevelPanel.SetActive(true);
+    }
+
+    public void ControlsButton()
+    {
+        TitlePanel.SetActive(false);
+        ControlsPanel.SetActive(true);
+    }
+
+    public void BackButton()
+    {
+        TitlePanel.SetActive(true);
+        ControlsPanel.SetActive(false);
     }
 }
