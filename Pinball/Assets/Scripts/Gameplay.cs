@@ -6,8 +6,13 @@ using TMPro;
 
 public class Gameplay : MonoBehaviour
 {
+    [Header("Timer\n")]
+    public float RemainingTime = 1.0f;
+    public TMP_Text TimeText;
+
     [Header("Points")]
     public int PointsNumber = 0;
+    public int PointsRequired = 0;
     public TMP_Text PointsText;
 
     [Header("Score")]
@@ -43,7 +48,7 @@ public class Gameplay : MonoBehaviour
 
     private AudioSource AudioSource;
 
-    private Countdown CountdownScript;
+    private bool TimerIsRunning = false;
     private bool GameFinished = false;
 
     void Start()
@@ -63,7 +68,6 @@ public class Gameplay : MonoBehaviour
         LeftButton = GameObject.Find("LeftButton");
 
         AudioSource = GetComponent<AudioSource>();
-        CountdownScript = GameObject.FindObjectOfType<Countdown>();
 
         GamePanel.SetActive(false);
         EndPanel.SetActive(false);
@@ -79,18 +83,44 @@ public class Gameplay : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (TimerIsRunning)
+        {
+            if (RemainingTime > 0)
+            {
+                RemainingTime -= Time.deltaTime;
+                DisplayTime(RemainingTime, true);
+            }
+            else
+            {
+                RemainingTime = 0;
+                TimerIsRunning = false;
+                EndGame();
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space) && GameFinished == false)
         {
             StartPanel.SetActive(false);
             GamePanel.SetActive(true);
 
-            CountdownScript.StartTime();
+            TimerIsRunning = true;
         }
     }
 
     public void LoadScene(int Number)
     {
         SceneManager.LoadScene(Number);
+    }
+
+    private void DisplayTime(float TimeToDisplay, bool GameIsRunning)
+    {
+        float minutes = Mathf.FloorToInt(TimeToDisplay / 60);
+        float seconds = Mathf.FloorToInt(TimeToDisplay % 60);
+
+        if (GameIsRunning)
+            TimeText.text = $"{minutes:00}:{seconds:00}";
+        else
+            ScoreTimeText.text = $"{minutes:00}:{seconds:00}";
     }
 
     public void AddPoints(int PointsEarned)
@@ -111,7 +141,7 @@ public class Gameplay : MonoBehaviour
             GamePanel.SetActive(false);
             EndPanel.SetActive(true);
 
-            CountdownScript.EndTime();
+            TimerIsRunning = false;
             GameFinished = true;
 
             StartCoroutine(Conclusion());
@@ -126,7 +156,7 @@ public class Gameplay : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         ScoreTime.SetActive(true);
-        ScoreTimeText.text = "00:00";
+        DisplayTime(RemainingTime, false);
 
         AudioSource.clip = ScoreSound;
         AudioSource.Play();
@@ -146,10 +176,11 @@ public class Gameplay : MonoBehaviour
 
         yield return new WaitForSeconds(1.8f);
 
-        if (PointsNumber > 4)
+        if (PointsNumber > PointsRequired)
         {
             ScoreConclusion.SetActive(true);
             ScoreConclusionText.text = "Victory";
+            ScoreConclusionText.color = Color.green;
 
             RightButton.SetActive(true);
             MiddleButton.SetActive(true);
@@ -162,6 +193,7 @@ public class Gameplay : MonoBehaviour
         {
             ScoreConclusion.SetActive(true);
             ScoreConclusionText.text = "Failed";
+            ScoreConclusionText.color = Color.red;
 
             RightButton.SetActive(true);
             MiddleButton.SetActive(true);

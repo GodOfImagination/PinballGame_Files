@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Final : MonoBehaviour
+public class End : MonoBehaviour
 {
     private Gameplay GameplayScript;
 
