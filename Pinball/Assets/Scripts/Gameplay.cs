@@ -42,9 +42,8 @@ public class Gameplay : MonoBehaviour
     private GameObject ScorePoints;
     private GameObject ScoreConclusion;
 
-    private GameObject RightButton;
-    private GameObject MiddleButton;
-    private GameObject LeftButton;
+    private GameObject VictoryButtons;
+    private GameObject FailedButtons;
 
     private AudioSource AudioSource;
 
@@ -65,9 +64,8 @@ public class Gameplay : MonoBehaviour
         ScorePoints = GameObject.Find("Text2Right");
         ScoreConclusion = GameObject.Find("Text3Right");
 
-        RightButton = GameObject.Find("RightButton");
-        MiddleButton = GameObject.Find("MiddleButton");
-        LeftButton = GameObject.Find("LeftButton");
+        VictoryButtons = GameObject.Find("VictoryButtons");
+        FailedButtons = GameObject.Find("FailedButtons");
 
         AudioSource = GetComponent<AudioSource>();
 
@@ -81,9 +79,8 @@ public class Gameplay : MonoBehaviour
         ScorePoints.SetActive(false);
         ScoreConclusion.SetActive(false);
 
-        RightButton.SetActive(false);
-        MiddleButton.SetActive(false);
-        LeftButton.SetActive(false);
+        VictoryButtons.SetActive(false);
+        FailedButtons.SetActive(false);
     }
 
     void Update()
@@ -182,6 +179,13 @@ public class Gameplay : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        ScoreConclusion.SetActive(true);
+
+        AudioSource.clip = ScoreSound;
+        AudioSource.Play();
+
+        yield return new WaitForSeconds(1f);
+
         AudioSource.clip = ConclusionSound;
         AudioSource.Play();
 
@@ -189,25 +193,20 @@ public class Gameplay : MonoBehaviour
 
         if (PointsCount > PointsNeeded)
         {
-            ScoreConclusion.SetActive(true);
             ScoreConclusionText.text = "Victory";
             ScoreConclusionText.color = Color.green;
 
-            RightButton.SetActive(true);
-            MiddleButton.SetActive(true);
-            LeftButton.SetActive(true);
+            VictoryButtons.SetActive(true);
 
             AudioSource.clip = WinSound;
             AudioSource.Play();
         }
         else
         {
-            ScoreConclusion.SetActive(true);
             ScoreConclusionText.text = "Failed";
             ScoreConclusionText.color = Color.red;
 
-            RightButton.SetActive(true);
-            MiddleButton.SetActive(true);
+            FailedButtons.SetActive(true);
 
             AudioSource.clip = LoseSound;
             AudioSource.Play();

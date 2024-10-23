@@ -12,7 +12,8 @@ public class Spring : MonoBehaviour
 	private float MoveCount = 0;
 
 	private bool IsReady = false;
-	private bool Launch = false;
+	private bool CanLaunch = false;
+	private bool LaunchDebounce = false;
 
 	private GameObject Ball;
 	private Rigidbody BallRigidbody;
@@ -35,18 +36,20 @@ public class Spring : MonoBehaviour
 			{
 				transform.Translate(0, 0, -MoveSpeed * Time.deltaTime);
 				MoveCount += MoveSpeed * Time.deltaTime;
-				Launch = true;
+				CanLaunch = true;
 			}
 		}
 		else if (MoveCount > 0)
 		{
-			if (Launch && IsReady) // Shoot the ball!
+			if (IsReady && CanLaunch) // Shoot the ball!
 			{
 				Ball.transform.TransformDirection(Vector3.forward * 10);
 				BallRigidbody.AddForce(0, 0, MoveCount * LaunchPower);
-				Launch = false;
 				IsReady = false;
+				CanLaunch = false;
+				LaunchDebounce = true;
 				AudioSource.Play();
+				StartCoroutine(Delay());
 			}
 			// Once we have reached the starting position fire off!
 			transform.Translate(0, 0, 20 * Time.deltaTime);
@@ -54,16 +57,22 @@ public class Spring : MonoBehaviour
 		}
 		if (MoveCount <= 0) // Just ensure we don't go past the end.
 		{
-			Launch = false;
+			CanLaunch = false;
 			MoveCount = 0;
 		}
 	}
 
 	void OnCollisionEnter(Collision other)
 	{
-		if (other.gameObject.name == "Ball")
+		if (other.gameObject.name == "Ball" && LaunchDebounce == false)
 		{
 			IsReady = true;
 		}
+	}
+
+	private IEnumerator Delay()
+	{
+		yield return new WaitForSeconds(1f);
+		LaunchDebounce = false;
 	}
 }
