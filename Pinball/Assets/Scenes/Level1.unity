@@ -7648,7 +7648,6 @@ MonoBehaviour:
   ConclusionSound: {fileID: 8300000, guid: 68524af02d22543d4af8279c98e31a56, type: 3}
   WinSound: {fileID: 8300000, guid: 2713b60c19001461aa1d3113d62866b3, type: 3}
   LoseSound: {fileID: 8300000, guid: 9e23f2264f8e6423e90d1fbfcd436673, type: 3}
-  SecretSound: {fileID: 8300000, guid: cdbd67e17d5ce49a9897b5026830365f, type: 3}
 --- !u!4 &1446280108
 Transform:
   m_ObjectHideFlags: 0
