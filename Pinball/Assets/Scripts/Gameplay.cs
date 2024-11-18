@@ -6,6 +6,22 @@ using TMPro;
 
 public class Gameplay : MonoBehaviour
 {
+    [Header("Screens\n")]
+    public GameObject ScreenStart;
+    public GameObject ScreenEnd;
+
+    [Space(10)]
+
+    public GameObject ScoreTime;
+    public GameObject ScorePoints;
+    public GameObject ScoreConclusion;
+
+    [Space(10)]
+
+    public GameObject ButtonsVictory;
+    public GameObject ButtonsFailed;
+
+
     [Header("Timer\n")]
     public float RemainingTime = 1.0f;
     public TMP_Text TimeText;
@@ -35,16 +51,6 @@ public class Gameplay : MonoBehaviour
 
     private GameObject Ball;
 
-    private GameObject StartPanel;
-    private GameObject EndPanel;
-
-    private GameObject ScoreTime;
-    private GameObject ScorePoints;
-    private GameObject ScoreConclusion;
-
-    private GameObject VictoryButtons;
-    private GameObject FailedButtons;
-
     private AudioSource AudioSource;
 
     private Countdown CountdownScript;
@@ -53,19 +59,16 @@ public class Gameplay : MonoBehaviour
     private bool CountdownStarted = false;
     private bool GameFinished = false;
 
+    [Space(10)]
+    public GameObject Arrow;
+
+    public float MoveLimit = 10.0f;
+    public float MoveSpeed = 10.0f;
+    private Vector3 StartPosition;
+
     void Start()
     {
         Ball = GameObject.Find("Ball");
-
-        StartPanel = GameObject.Find("StartPanel");
-        EndPanel = GameObject.Find("EndPanel");
-
-        ScoreTime = GameObject.Find("Text1Right");
-        ScorePoints = GameObject.Find("Text2Right");
-        ScoreConclusion = GameObject.Find("Text3Right");
-
-        VictoryButtons = GameObject.Find("VictoryButtons");
-        FailedButtons = GameObject.Find("FailedButtons");
 
         AudioSource = GetComponent<AudioSource>();
 
@@ -73,14 +76,7 @@ public class Gameplay : MonoBehaviour
 
         PointsNeededText.text = (PointsNeeded + 1).ToString();
 
-        EndPanel.SetActive(false);
-
-        ScoreTime.SetActive(false);
-        ScorePoints.SetActive(false);
-        ScoreConclusion.SetActive(false);
-
-        VictoryButtons.SetActive(false);
-        FailedButtons.SetActive(false);
+        StartPosition = Arrow.transform.position;
     }
 
     void Update()
@@ -108,10 +104,14 @@ public class Gameplay : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space) && GameFinished == false)
         {
-            StartPanel.SetActive(false);
+            ScreenStart.SetActive(false);
 
             TimerIsRunning = true;
         }
+
+        Vector3 MoveVector = StartPosition;
+        MoveVector.x += MoveLimit * Mathf.Sin(Time.time * MoveSpeed);
+        Arrow.transform.position = MoveVector;
     }
 
     public void LoadScene(int Number)
@@ -145,7 +145,7 @@ public class Gameplay : MonoBehaviour
         {
             Destroy(Ball);
 
-            EndPanel.SetActive(true);
+            ScreenEnd.SetActive(true);
 
             CountdownScript.End();
 
@@ -196,7 +196,7 @@ public class Gameplay : MonoBehaviour
             ScoreConclusionText.text = "Victory";
             ScoreConclusionText.color = Color.green;
 
-            VictoryButtons.SetActive(true);
+            ButtonsVictory.SetActive(true);
 
             AudioSource.clip = WinSound;
             AudioSource.Play();
@@ -206,7 +206,7 @@ public class Gameplay : MonoBehaviour
             ScoreConclusionText.text = "Failed";
             ScoreConclusionText.color = Color.red;
 
-            FailedButtons.SetActive(true);
+            ButtonsFailed.SetActive(true);
 
             AudioSource.clip = LoseSound;
             AudioSource.Play();
