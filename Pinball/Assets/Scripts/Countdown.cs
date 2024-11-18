@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Countdown : MonoBehaviour
 {
-    [Header("Sounds")]
-    public AudioClip Second1Sound;
-    public AudioClip Second2Sound;
-    public AudioClip Second3Sound;
-    public AudioClip Second4Sound;
-    public AudioClip Second5Sound;
+    [Header("Sounds\n")]
+    public AudioClip SoundCountdown1;
+    public AudioClip SoundCountdown2;
+    public AudioClip SoundCountdown3;
+    public AudioClip SoundCountdown4;
+    public AudioClip SoundCountdown5;
 
     private AudioSource AudioSource;
 
@@ -18,39 +18,39 @@ public class Countdown : MonoBehaviour
         AudioSource = GetComponent<AudioSource>();
     }
 
-    public void StartTheCountdown()
+    public void CountdownStart()
     {
-        StartCoroutine(BeginCountdown());
+        StartCoroutine(CountdownBegin());
     }
 
-    public void End()
+    public void CountdownEnd()
     {
         Destroy(this.gameObject);
     }
 
-    private IEnumerator BeginCountdown()
+    private IEnumerator CountdownBegin()
     {
-        AudioSource.clip = Second5Sound;
+        AudioSource.clip = SoundCountdown5;
         AudioSource.Play();
 
         yield return new WaitForSeconds(1f);
 
-        AudioSource.clip = Second4Sound;
+        AudioSource.clip = SoundCountdown4;
         AudioSource.Play();
 
         yield return new WaitForSeconds(1f);
 
-        AudioSource.clip = Second3Sound;
+        AudioSource.clip = SoundCountdown3;
         AudioSource.Play();
 
         yield return new WaitForSeconds(1f);
 
-        AudioSource.clip = Second2Sound;
+        AudioSource.clip = SoundCountdown2;
         AudioSource.Play();
 
         yield return new WaitForSeconds(1f);
 
-        AudioSource.clip = Second1Sound;
+        AudioSource.clip = SoundCountdown1;
         AudioSource.Play();
     }
 }

@@ -6,35 +6,26 @@ public class Bumper : MonoBehaviour
 {
 	public int PointsRewarded;
 
-	public float BumperForce = 300f;
-	public float BumperFlash = 0.1f;
-
+	private float BumperForce = 300;
+	private float BumperFlash = 0.1f;
 	private Light BumperLight;
-
-	private GameObject Ball;
-	private Rigidbody BallRigidbody;
-
 	private Gameplay GameplayScript;
 
     void Start()
     {
 		BumperLight = GetComponent<Light>();
-
-		Ball = GameObject.Find("Ball");
-		BallRigidbody = Ball.GetComponent<Rigidbody>();
-
-		GameplayScript = GameObject.FindObjectOfType<Gameplay>();
-
 		BumperLight.intensity = 0;
+		GameplayScript = GameObject.FindObjectOfType<Gameplay>();
 	}
 
 	void OnCollisionEnter(Collision other)
 	{
-		if (other.gameObject.name == "Ball")
+		if (other.gameObject.name == "Ball" || other.gameObject.name == "Ball(Clone)")
 		{
 			StartCoroutine(LightFlash());
 
-			Vector3 Direction = transform.position - Ball.transform.position;
+			Vector3 Direction = transform.position - other.gameObject.transform.position;
+			Rigidbody BallRigidbody = other.gameObject.GetComponent<Rigidbody>();
 			BallRigidbody.AddForce(-Direction * BumperForce);
 
 			GameplayScript.AddPoints(PointsRewarded);

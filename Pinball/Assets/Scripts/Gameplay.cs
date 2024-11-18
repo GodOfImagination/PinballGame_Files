@@ -21,57 +21,67 @@ public class Gameplay : MonoBehaviour
     public GameObject ButtonsVictory;
     public GameObject ButtonsFailed;
 
+    [Space(20)]
 
     [Header("Timer\n")]
-    public float RemainingTime = 1.0f;
+    public float RemainingTime = 120;
     public TMP_Text TimeText;
 
-    [Header("Points")]
-    public int PointsCount = 0;
+    [Space(20)]
+
+    [Header("Points\n")]
+    public int Points = 0;
+    public TMP_Text PointsText;
     public int PointsNeeded = 0;
     public TMP_Text PointsNeededText;
-    public TMP_Text PointsText;
 
-    [Header("Score")]
+    [Space(20)]
+
+    [Header("Score\n")]
     public TMP_Text ScoreTimeText;
     public TMP_Text ScorePointsText;
     public TMP_Text ScoreConclusionText;
 
-    [Header("Sounds")]
-    public AudioClip PointSound;
+    [Space(20)]
+
+    [Header("Other\n")]
+    public int BallCount = 1;
 
     [Space(10)]
-    public AudioClip EndSound;
-    public AudioClip ScoreSound;
-    public AudioClip ConclusionSound;
+
+    public GameObject Arrow;
+    public float MoveLimit = 30;
+    public float MoveSpeed = 10;
+    private Vector3 StartPosition;
+
+    [Space(20)]
+
+    [Header("Sounds\n")]
+    public AudioClip SoundStart;
+    public AudioClip SoundEnd;
 
     [Space(10)]
-    public AudioClip WinSound;
-    public AudioClip LoseSound;
 
-    private GameObject Ball;
+    public AudioClip SoundDing;
+    public AudioClip SoundScore;
+    public AudioClip SoundConclusion;
+
+    [Space(10)]
+
+    public AudioClip SoundVictory;
+    public AudioClip SoundFailed;
 
     private AudioSource AudioSource;
-
     private Countdown CountdownScript;
 
     private bool TimerIsRunning = false;
     private bool CountdownStarted = false;
+    private bool GameStarted = false;
     private bool GameFinished = false;
-
-    [Space(10)]
-    public GameObject Arrow;
-
-    public float MoveLimit = 10.0f;
-    public float MoveSpeed = 10.0f;
-    private Vector3 StartPosition;
 
     void Start()
     {
-        Ball = GameObject.Find("Ball");
-
         AudioSource = GetComponent<AudioSource>();
-
         CountdownScript = GameObject.FindObjectOfType<Countdown>();
 
         PointsNeededText.text = (PointsNeeded + 1).ToString();
@@ -92,21 +102,35 @@ public class Gameplay : MonoBehaviour
             {
                 RemainingTime = 0;
                 TimerIsRunning = false;
-                EndGame();
+                ConcludeGame();
             }
 
             if (RemainingTime < 6 && CountdownStarted == false)
             {
-                CountdownScript.StartTheCountdown();
+                CountdownScript.CountdownStart();
                 CountdownStarted = true;
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) && GameFinished == false)
+        if (Input.GetKeyUp(KeyCode.Space) && GameStarted == false)
         {
+            GameStarted = true;
+
             ScreenStart.SetActive(false);
 
             TimerIsRunning = true;
+
+            AudioSource.clip = SoundStart;
+            AudioSource.Play();
+        }
+
+        if (GameFinished)
+        {
+            if (GameObject.Find("Ball"))
+                Destroy(GameObject.Find("Ball"));
+
+            if (GameObject.Find("Ball(Clone)"))
+                Destroy(GameObject.Find("Ball(Clone)"));
         }
 
         Vector3 MoveVector = StartPosition;
@@ -132,25 +156,38 @@ public class Gameplay : MonoBehaviour
 
     public void AddPoints(int PointsEarned)
     {
-        PointsCount += PointsEarned;
-        PointsText.text = PointsCount.ToString();
+        Points += PointsEarned;
+        PointsText.text = Points.ToString();
 
-        AudioSource.clip = PointSound;
+        AudioSource.clip = SoundDing;
         AudioSource.Play();
     }
 
-    public void EndGame()
+    public void CheckCount(bool Add)
+    {
+        if (Add)
+            BallCount = BallCount + 1;
+        else
+            BallCount = BallCount - 1;
+
+        if (BallCount == 0)
+        {
+            ConcludeGame();
+        }
+    }
+
+    public void ConcludeGame()
     {
         if (GameFinished == false)
         {
-            Destroy(Ball);
-
             ScreenEnd.SetActive(true);
 
-            CountdownScript.End();
+            CountdownScript.CountdownEnd();
 
             TimerIsRunning = false;
             GameFinished = true;
+
+
 
             StartCoroutine(Conclusion());
         }
@@ -158,7 +195,7 @@ public class Gameplay : MonoBehaviour
 
     private IEnumerator Conclusion()
     {
-        AudioSource.clip = EndSound;
+        AudioSource.clip = SoundEnd;
         AudioSource.Play();
 
         yield return new WaitForSeconds(2f);
@@ -166,39 +203,39 @@ public class Gameplay : MonoBehaviour
         ScoreTime.SetActive(true);
         DisplayTime(RemainingTime, false);
 
-        AudioSource.clip = ScoreSound;
+        AudioSource.clip = SoundScore;
         AudioSource.Play();
 
         yield return new WaitForSeconds(1f);
 
         ScorePoints.SetActive(true);
-        ScorePointsText.text = PointsCount.ToString();
+        ScorePointsText.text = Points.ToString();
 
-        AudioSource.clip = ScoreSound;
+        AudioSource.clip = SoundScore;
         AudioSource.Play();
 
         yield return new WaitForSeconds(1f);
 
         ScoreConclusion.SetActive(true);
 
-        AudioSource.clip = ScoreSound;
+        AudioSource.clip = SoundScore;
         AudioSource.Play();
 
         yield return new WaitForSeconds(1f);
 
-        AudioSource.clip = ConclusionSound;
+        AudioSource.clip = SoundConclusion;
         AudioSource.Play();
 
         yield return new WaitForSeconds(1.8f);
 
-        if (PointsCount > PointsNeeded)
+        if (Points > PointsNeeded)
         {
             ScoreConclusionText.text = "Victory";
             ScoreConclusionText.color = Color.green;
 
             ButtonsVictory.SetActive(true);
 
-            AudioSource.clip = WinSound;
+            AudioSource.clip = SoundVictory;
             AudioSource.Play();
         }
         else
@@ -208,7 +245,7 @@ public class Gameplay : MonoBehaviour
 
             ButtonsFailed.SetActive(true);
 
-            AudioSource.clip = LoseSound;
+            AudioSource.clip = SoundFailed;
             AudioSource.Play();
         }
     }

@@ -17,14 +17,12 @@ public class Spring : MonoBehaviour
 
 	private GameObject Ball;
 	private Rigidbody BallRigidbody;
-
 	private AudioSource AudioSource;
 
 	void Start()
     {
 		Ball = GameObject.Find("Ball");
 		BallRigidbody = Ball.GetComponent<Rigidbody>();
-
 		AudioSource = GetComponent<AudioSource>();
 	}
 

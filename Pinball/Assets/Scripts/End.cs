@@ -13,9 +13,10 @@ public class End : MonoBehaviour
 
 	void OnCollisionEnter(Collision other)
 	{
-		if (other.gameObject.name == "Ball")
+		if (other.gameObject.name == "Ball" || other.gameObject.name == "Ball(Clone)")
 		{
-			GameplayScript.EndGame();
+			Destroy(other.gameObject);
+			GameplayScript.CheckCount(false);
 		}
 	}
 }
